@@ -37,7 +37,11 @@ class Auth extends BaseController
                     'logged_in' => true
                 ]);
 
-                return redirect()->to('/tables');
+                if ($user->role === 'admin') {
+                    return redirect()->to('/admin');
+                } else {
+                    return redirect()->to('/tables');
+                }
             } else {
                 log_message('info', 'Password verification failed');
             }
