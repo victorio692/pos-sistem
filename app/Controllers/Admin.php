@@ -14,11 +14,52 @@ class Admin extends BaseController
         $tableModel = new TableModel();
         $menuModel  = new MenuModel();
         $orderModel = new OrderModel();
+        $db = \Config\Database::connect();
+
+        // Get statistics
+        $totalTables = $tableModel->countAll();
+        $totalMenu = $menuModel->countAll();
+        $totalOrdersToday = $orderModel->where('DATE(created_at)', date('Y-m-d'))->countAllResults();
+        $totalUsers = $db->table('users')->countAllResults();
+
+        // Get revenue today
+        $revenueToday = $db->table('orders')
+            ->select('SUM(total_price) as total')
+            ->where('DATE(created_at)', date('Y-m-d'))
+            ->where('status !=', 'pending')
+            ->get()
+            ->getRow();
+
+        // Get all orders with status
+        $allOrders = $orderModel->findAll();
+        $ordersCount = [
+            'pending' => 0,
+            'completed' => 0,
+            'cancelled' => 0
+        ];
+        foreach ($allOrders as $order) {
+            if (isset($ordersCount[$order->status])) {
+                $ordersCount[$order->status]++;
+            }
+        }
+
+        // Get recent orders
+        $recentOrders = $db->table('orders')
+            ->select('orders.*, tables.table_number')
+            ->join('tables', 'tables.id = orders.table_id', 'left')
+            ->orderBy('orders.created_at', 'DESC')
+            ->limit(6)
+            ->get()
+            ->getResult();
 
         $data = [
-            'totalTables' => $tableModel->countAll(),
-            'totalMenu'   => $menuModel->countAll(),
-            'totalOrders' => $orderModel->where('DATE(created_at)', date('Y-m-d'))->countAllResults(),
+            'totalTables' => $totalTables,
+            'totalMenu' => $totalMenu,
+            'totalOrdersToday' => $totalOrdersToday,
+            'totalUsers' => $totalUsers,
+            'revenueToday' => $revenueToday->total ?? 0,
+            'ordersCount' => $ordersCount,
+            'recentOrders' => $recentOrders,
         ];
 
         return view('admin/dashboard', $data);

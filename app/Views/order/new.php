@@ -17,12 +17,12 @@
     <input type="hidden" name="table_number" value="<?= $tableNumber ?>">
 
     <div class="mb-4">
-      <label class="block text-sm font-semibold mb-2">Customer Name</label>
+      <label class="block text-sm font-semibold mb-2">Name</label>
       <input type="text" name="customer_name" required class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-600">
     </div>
 
     <div class="mb-6">
-      <label class="block text-sm font-semibold mb-2">Total Person</label>
+      <label class="block text-sm font-semibold mb-2">Person</label>
       <input type="number" name="total_person" required min="1" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-600">
     </div>
 
