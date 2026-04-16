@@ -38,7 +38,7 @@
                     <span>🍜</span> Menu
                 </a>
                 <a href="<?= base_url('admin/tables') ?>" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg transition">
-                    <span>🪑</span> Meja
+                    <span>🍽️</span> Meja
                 </a>
                 <a href="<?= base_url('admin/users') ?>" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg transition">
                     <span>👥</span> User
@@ -87,7 +87,7 @@
                                 <h3 class="text-3xl font-bold text-gray-800 mt-2"><?= $totalTables ?></h3>
                                 <p class="text-xs text-green-600 mt-2">✓ Tersedia</p>
                             </div>
-                            <span class="text-4xl">🪑</span>
+                            <span class="text-4xl">🍽️</span>
                         </div>
                     </div>
 

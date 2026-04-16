@@ -27,6 +27,25 @@ $routes->get('order/success', 'Order::success');
 $routes->get('order/(:any)', 'Order::index/$1');
 $routes->post('order', 'Order::store');
 
+// KASIR
+$routes->group('kasir', ['filter' => 'auth'], function($routes){
+    $routes->get('/', 'Kasir::index');
+    $routes->get('order/(:num)', 'Kasir::order/$1');
+    $routes->post('order/create', 'Kasir::createOrder');
+    $routes->get('payment/(:num)', 'Kasir::payment/$1');
+    $routes->post('payment/process', 'Kasir::processPayment');
+    $routes->get('receipt/(:num)', 'Kasir::receipt/$1');
+    $routes->get('history', 'Kasir::history');
+    $routes->get('profile', 'Kasir::profile');
+    $routes->post('finishTable/(:num)', 'Kasir::finishTable/$1');
+    $routes->get('getHistoryData', 'Kasir::getHistoryData');
+    $routes->get('getOrderDetail/(:num)', 'Kasir::getOrderDetail/$1');
+    $routes->get('printReceipt/(:num)', 'Kasir::printReceipt/$1');
+    $routes->get('api/tables', 'Kasir::getTables');
+    $routes->get('api/menu/(:any)', 'Kasir::getMenuByCategory/$1');
+    $routes->post('api/table/status/(:num)/(:any)', 'Kasir::updateTableStatus/$1/$2');
+});
+
 // ADMIN
 $routes->group('admin', ['filter' => 'auth'], function($routes){
 

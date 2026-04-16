@@ -13,6 +13,9 @@ class OrderModel extends Model
         'table_id',
         'total_price',
         'status',
+        'payment_method',
+        'payment_amount',
+        'guest_count',
         'created_at',
         'updated_at'
     ];
