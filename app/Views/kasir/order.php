@@ -955,10 +955,11 @@
         <!-- CATEGORY TABS -->
         <div class="flex gap-3 px-8 pb-4 overflow-x-auto">
             <button class="category-btn active" onclick="filterCategory('all')">SEMUA</button>
-            <button class="category-btn" onclick="filterCategory('makanan')">MAKANAN</button>
-            <button class="category-btn" onclick="filterCategory('minuman')">MINUMAN</button>
-            <button class="category-btn" onclick="filterCategory('snack')">SNACK</button>
-            <button class="category-btn" onclick="filterCategory('paket')">PAKET HEMAT</button>
+            <?php if(!empty($categories)): ?>
+                <?php foreach($categories as $cat): ?>
+                    <button class="category-btn" onclick="filterCategory('<?= strtolower($cat['category']) ?>')"><?= strtoupper($cat['category']) ?></button>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
     
@@ -1130,10 +1131,11 @@
             
             let html = '';
             filtered.forEach(item => {
+                const imageUrl = item.image ? '<?= base_url() ?>' + item.image : 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22120%22%3E%3Crect fill=%22%23e9ecef%22 width=%22300%22 height=%22120%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2214%22 fill=%22%23adb5bd%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo Image%3C/text%3E%3C/svg%3E';
                 html += `
-                    <div class="menu-card" onclick="openProductModal(${item.id}, '${item.name.replace(/'/g, "\\'\'")}', ${item.price})">
+                    <div class="menu-card" onclick="openProductModal(${item.id})">
                         <div class="menu-image">
-                            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&q=80" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22120%22%3E%3Crect fill=%22%23e9ecef%22 width=%22300%22 height=%22120%22/%3E%3C/svg%3E'" alt="${item.name}">
+                            <img src="${imageUrl}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22120%22%3E%3Crect fill=%22%23e9ecef%22 width=%22300%22 height=%22120%22/%3E%3C/svg%3E'" alt="${item.name}">
                         </div>
                         <div class="menu-info">
                             <div class="menu-name">${item.name}</div>
@@ -1156,14 +1158,19 @@
             loadMenu(category);
         }
         
-        function openProductModal(menuId, name, price) {
-            // Find menu item to get category
-            const menuItem = menu.find(m => m.id === menuId);
-            const category = menuItem ? menuItem.category : 'makanan';
-
-            console.log('[DEBUG] Menu Item:', menuItem);
-            console.log('[DEBUG] Category:', category);
-            console.log('[DEBUG] Available Addons:', availableAddons);
+        function openProductModal(menuId) {
+            // Find menu item to get all details
+            const menuItem = menu.find(m => parseInt(m.id) === parseInt(menuId));
+            
+            if (!menuItem) {
+                console.error('Menu item not found for id:', menuId);
+                alert('Menu tidak ditemukan');
+                return;
+            }
+            
+            const name = menuItem.name || '';
+            const price = menuItem.price || 0;
+            const category = menuItem.category || 'makanan';
 
             currentProduct = { id: menuId, name: name, price: price, category: category };
             currentQty = 1;
@@ -1171,7 +1178,14 @@
 
             // Set modal content
             document.getElementById('modalProductName').textContent = name;
-            document.getElementById('modalProductImage').src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80';
+            
+            // Set gambar dari menu item
+            const imageUrl = menuItem.image ? '<?= base_url() ?>' + menuItem.image : 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22%3E%3Crect fill=%22%23e9ecef%22 width=%22400%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2216%22 fill=%22%23adb5bd%22 text-anchor=%22middle%22 dy=%22.3em%22%3ENo Image%3C/text%3E%3C/svg%3E';
+            document.getElementById('modalProductImage').src = imageUrl;
+            document.getElementById('modalProductImage').onerror = function() {
+                this.src = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22200%22%3E%3Crect fill=%22%23e9ecef%22 width=%22400%22 height=%22200%22/%3E%3C/svg%3E';
+            };
+            
             document.getElementById('qtyDisplayModal').textContent = '1';
             document.getElementById('modalProductPrice').textContent = `Rp${parseInt(price).toLocaleString('id-ID')}`;
             document.getElementById('basePriceDisplay').textContent = `Rp${parseInt(price).toLocaleString('id-ID')}`;

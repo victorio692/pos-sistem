@@ -70,6 +70,16 @@ class Kasir extends BaseController
         // Get all menu
         $menu = $this->menu->findAll();
         
+        // Get distinct categories from database
+        $categories = $this->db->table('menu')
+            ->distinct()
+            ->select('category')
+            ->where('category !=', '')
+            ->where('category !=', null)
+            ->orderBy('category', 'ASC')
+            ->get()
+            ->getResultArray();
+        
         // Define add-ons berdasarkan kategori menu
         $addons = [
             'makanan' => [
@@ -101,6 +111,7 @@ class Kasir extends BaseController
             'table' => $table,
             'table_id' => $tableId,
             'menu' => $menu,
+            'categories' => $categories,
             'addons' => $addons,
         ];
 
