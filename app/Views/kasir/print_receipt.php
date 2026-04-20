@@ -287,6 +287,12 @@
                 <span class="info-label">Tanggal:</span>
                 <span class="info-value"><?php echo date('d/m/Y H:i', strtotime($order['created_at'])); ?></span>
             </div>
+            <?php if (!empty($order['customer_name'])): ?>
+            <div class="info-row">
+                <span class="info-label">Nama Customer:</span>
+                <span class="info-value"><?php echo $order['customer_name']; ?></span>
+            </div>
+            <?php endif; ?>
             <div class="info-row">
                 <span class="info-label">Jumlah Tamu:</span>
                 <span class="info-value"><?php echo $order['guest_count'] ?? 1; ?> orang</span>

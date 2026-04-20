@@ -43,6 +43,7 @@ $routes->group('kasir', ['filter' => 'auth'], function($routes){
     $routes->get('printReceipt/(:num)', 'Kasir::printReceipt/$1');
     $routes->get('api/tables', 'Kasir::getTables');
     $routes->get('api/menu/(:any)', 'Kasir::getMenuByCategory/$1');
+    $routes->post('api/updateTableStatus/(:num)', 'Kasir::updateTableStatus/$1');
     $routes->post('api/table/status/(:num)/(:any)', 'Kasir::updateTableStatus/$1/$2');
 });
 

@@ -286,35 +286,26 @@
         
         .table-card:hover {
             border-color: rgba(59, 130, 246, 0.5);
-            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
-            transform: translateY(-8px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
         }
         
         .table-card:hover::before {
-            transform: scaleX(1);
+            transform: scaleX(0);
         }
         
         .table-card.occupied {
             background: rgba(249, 115, 22, 0.03);
             border-color: rgba(239, 68, 68, 0.2);
-            cursor: not-allowed;
-            opacity: 0.6;
+            cursor: pointer;
         }
-        
+
         .table-card.occupied:hover {
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.08);
+        }
+        
+        .table-card:hover .table-icon {
             transform: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            border-color: rgba(239, 68, 68, 0.2);
-        }
-        
-        .table-icon {
-            font-size: 48px;
-            display: block;
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .table-card:hover .table-icon:not(.table-card.occupied .table-icon) {
-            transform: scale(1.1) rotate(5deg);
         }
         
         .table-number {
@@ -420,12 +411,452 @@
         .finish-btn .material-icons {
             font-size: 16px;
         }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            display: none !important;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active,
+        .modal-overlay.show {
+            display: flex !important;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-icon {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .modal-info {
+            font-size: 14px;
+            color: #718096;
+            text-align: center;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .modal-question {
+            font-size: 15px;
+            color: #1a202c;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .modal-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-btn-cancel {
+            background: #f3f4f6;
+            color: #1a202c;
+            border: 1px solid #d1d5db;
+        }
+
+        .modal-btn-cancel:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
+        }
+
+        .modal-btn-confirm {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .modal-btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .modal-btn:active {
+            transform: translateY(0);
+        }
+
+        /* START ORDER MODAL STYLES */
+        .modal-content.order-form {
+            max-width: 480px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            background: #f8f9ff;
+        }
+
+        .form-input::placeholder {
+            color: #a0aec0;
+        }
+
+        .guest-counter {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .counter-btn {
+            width: 44px;
+            height: 44px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            background: #f9fafb;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 700;
+            color: #4f46e5;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .counter-btn:hover {
+            border-color: #4f46e5;
+            background: #eff0ff;
+        }
+
+        .counter-btn:active {
+            transform: scale(0.95);
+        }
+
+        .counter-display {
+            flex: 1;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a202c;
+            padding: 12px 16px;
+            background: #f9fafb;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .capacity-warning {
+            font-size: 13px;
+            color: #718096;
+            margin-top: 8px;
+        }
+
+        .capacity-warning.error {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .modal-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .modal-btn:disabled:hover {
+            transform: none !important;
+        }
+
+        /* SIDEBAR STYLES */
+        .hamburger-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: 16px;
+        }
+
+        .hamburger-btn span {
+            width: 24px;
+            height: 2px;
+            background: #1a202c;
+            border-radius: 1px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .hamburger-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(10px, 10px);
+        }
+
+        .hamburger-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+            border-right: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0;
+        }
+
+        .sidebar-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: #718096;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-close:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #1a202c;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #2D2D2D;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(79, 70, 229, 0.08);
+            border-color: rgba(79, 70, 229, 0.2);
+            color: #4f46e5;
+        }
+
+        .sidebar-item.active {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(99, 102, 241, 0.1));
+            border-color: rgba(79, 70, 229, 0.3);
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+        .sidebar-item .material-icons {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-bottom {
+            padding: 16px 12px;
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
+            flex-shrink: 0;
+        }
+
+        .sidebar-logout {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(249, 115, 22, 0.08));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            cursor: pointer;
+            color: #dc2626;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .sidebar-logout:hover {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(249, 115, 22, 0.15));
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .sidebar-logout .material-icons {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        @media (max-width: 768px) {
+            .header-section {
+                padding: 16px 20px;
+            }
+
+            .header-top {
+                margin-bottom: 12px;
+            }
+
+            .header-title h1 {
+                font-size: 24px;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Menu</h2>
+            <button class="sidebar-close" id="sidebarClose" onclick="closeSidebar()">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="<?php echo base_url('kasir/tables'); ?>" class="sidebar-item active">
+                <span class="material-icons">table_restaurant</span>
+                <span>Pilih meja</span>
+            </a>
+            <a href="<?php echo base_url('kasir/history'); ?>" class="sidebar-item">
+                <span class="material-icons">history</span>
+                <span>History</span>
+            </a>
+            <a href="<?php echo base_url('kasir/profile'); ?>" class="sidebar-item">
+                <span class="material-icons">person</span>
+                <span>Profil</span>
+            </a>
+        </nav>
+        <div class="sidebar-bottom">
+            <form method="post" action="<?php echo base_url('auth/logout'); ?>" style="margin: 0;">
+                <button type="submit" class="sidebar-logout" style="width: 100%; text-align: left; border: none; padding: 12px 16px; font-family: 'Poppins', sans-serif;">
+                    <span class="material-icons">logout</span>
+                    <span>Logout</span>
+                </button>
+            </form>
+        </div>
+    </div>
+    
     <!-- HEADER -->
     <div class="header-section">
         <div class="header-top">
+            <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <div class="header-title">
                 <h1>Pilih Meja</h1>
                 <p>Kelola meja restoran Anda</p>
@@ -468,6 +899,7 @@
     
     <!-- MAIN CONTENT -->
     <div class="main-content">
+       
         <div class="table-grid" id="tableGrid">
             <!-- Tables will be loaded here -->
         </div>
@@ -478,11 +910,88 @@
         </div>
     </div>
     
+    <!-- MODAL FOR STARTING NEW ORDER (Available Tables) -->
+    <div class="modal-overlay" id="startOrderModal">
+        <div class="modal-content order-form">
+            <div class="modal-icon">🍽️</div>
+            <div class="modal-title" id="orderModalTitle">Mulai Pesanan</div>
+            <div class="modal-info" id="orderModalInfo">Silahkan isi detail pesanan</div>
+            
+            <div class="form-group">
+                <label class="form-label">Nama Customer</label>
+                <input type="text" id="customerName" class="form-input" placeholder="Opsional, misal: Bapak Ahmad">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Jumlah Tamu</label>
+                <div class="guest-counter">
+                    <button type="button" class="counter-btn" onclick="decrementGuestCount()">−</button>
+                    <div class="counter-display" id="guestCountDisplay">1</div>
+                    <button type="button" class="counter-btn" onclick="incrementGuestCount()">+</button>
+                </div>
+                <div class="capacity-warning" id="capacityWarning"></div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" onclick="closeStartOrderModal()">BATAL</button>
+                <button class="modal-btn modal-btn-confirm" id="confirmOrderBtn" onclick="confirmStartOrder()">LANJUTKAN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FOR FINISHING OCCUPIED TABLE -->
+    <div class="modal-overlay" id="finishModal">
+        <div class="modal-content">
+            
+            <div class="modal-title" id="modalTitle">Selesaikan Meja 1?</div>
+            <div class="modal-info" id="modalInfo">Meja ini sedang digunakan.</div>
+            <div class="modal-question">Apakah sudah selesai?</div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" onclick="closeFinishModal()">BATAL</button>
+                <button class="modal-btn modal-btn-confirm" onclick="confirmFinishTable()">YA, SELESAI</button>
+            </div>
+        </div>
+    </div>
+    
     <script>
+        // ========== SIDEBAR FUNCTIONS ==========
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const hamburger = document.getElementById('hamburgerBtn');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const hamburger = document.getElementById('hamburgerBtn');
+            
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            hamburger.classList.remove('active');
+        }
+
+        // Close sidebar when clicking on a link
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    if (this.getAttribute('onclick')) return;
+                    closeSidebar();
+                });
+            });
+        });
+
+        let selectedTableId = null;
         // Sample table data - in real app, this would come from backend
         let tables = <?php echo json_encode($tables ?? []); ?>; // CHANGED: const → let untuk bisa di-reassign
         
         function loadTables() {
+            console.log('[loadTables] Tables data:', tables);
             const tableGrid = document.getElementById('tableGrid');
             const emptyState = document.getElementById('emptyState');
             
@@ -501,24 +1010,26 @@
             let html = '';
             
             tables.forEach(table => {
-                const isOccupied = table.status === 'occupied';
+                const isOccupied = table.status === 'occupied' || table.status === 'terisi';
                 if (isOccupied) occupied++; else available++;
                 
                 const statusClass = isOccupied ? 'occupied' : '';
                 const statusText = isOccupied ? 'Terisi' : 'Tersedia';
                 const statusBadgeClass = isOccupied ? 'status-occupied' : 'status-available';
-                const guestText = table.guest_count ? `👥 ${table.guest_count} Tamu` : '';
-                const clickHandler = isOccupied ? '' : `onclick="selectTable(${table.id})"`;
-                const finishButton = isOccupied ? `<button class="finish-btn" onclick="finishTable(${table.id}, event)"><span class="material-icons">check_circle</span> Selesai</button>` : '';
+                const currentGuestCount = table.guest_count || 0;
+                const tableNum = table.table_number || table.id;
+                
+                // Use data attributes for event delegation instead of inline onclick
+                const dataAttrs = isOccupied 
+                    ? `data-action="finish" data-table-id="${table.id}" data-table-num="${tableNum}" data-guest-count="${currentGuestCount}"`
+                    : `data-action="order" data-table-id="${table.id}" data-table-num="${tableNum}" data-table-capacity="${table.capacity || 2}"`;
                 
                 html += `
-                    <div class="table-card ${statusClass}" ${clickHandler}>
+                    <div class="table-card ${statusClass}" ${dataAttrs}>
                         <div class="table-icon">🍽️</div>
-                        <div class="table-number">MEJA ${table.table_number}</div>
+                        <div class="table-number">MEJA ${tableNum}</div>
                         <div class="table-capacity">👥 Kapasitas: ${table.capacity || 2} Orang</div>
                         <div class="table-status ${statusBadgeClass}">${statusText}</div>
-                        ${guestText ? `<div class="table-guest-info">${guestText}</div>` : ''}
-                        ${finishButton}
                     </div>
                 `;
             });
@@ -526,23 +1037,190 @@
             tableGrid.innerHTML = html;
             document.getElementById('available-count').textContent = available;
             document.getElementById('occupied-count').textContent = occupied;
+            
+            // Add event listeners to all table cards (event delegation)
+            document.querySelectorAll('.table-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    const action = this.dataset.action;
+                    const tableId = this.dataset.tableId;
+                    
+                    if (action === 'finish') {
+                        const tableNum = this.dataset.tableNum;
+                        const guestCount = this.dataset.guestCount;
+                        console.log('[Table Card Click] Finish action for table:', tableId, 'num:', tableNum, 'guests:', guestCount);
+                        openFinishModal(tableId, tableNum, guestCount);
+                    } else if (action === 'order') {
+                        const tableNum = this.dataset.tableNum;
+                        const capacity = parseInt(this.dataset.tableCapacity);
+                        console.log('[Table Card Click] Order action for table:', tableId, 'num:', tableNum, 'capacity:', capacity);
+                        openStartOrderModal(tableId, tableNum, capacity);
+                    }
+                });
+            });
         }
         
-        function selectTable(tableId) {
-            // Redirect to order page for this table
-            window.location.href = `<?php echo base_url('kasir/order/'); ?>${tableId}`;
-        }
-
-        function finishTable(tableId, event) {
-            event.stopPropagation();
+        // ========== START ORDER MODAL FUNCTIONS ==========
+        let currentOrderTableId = null;
+        let currentOrderTableNum = null;
+        let currentOrderTableCapacity = null;
+        let currentGuestCount = 1;
+        
+        function openStartOrderModal(tableId, tableNum, capacity) {
+            console.log('[openStartOrderModal] Opening for table:', tableId, 'num:', tableNum, 'capacity:', capacity);
+            currentOrderTableId = tableId;
+            currentOrderTableNum = tableNum;
+            currentOrderTableCapacity = capacity;
+            currentGuestCount = 1;
             
-            // Confirm before finishing table
-            if (!confirm('Konfirmasi: Tandai meja ini selesai digunakan?')) {
+            document.getElementById('orderModalTitle').textContent = `Mulai Pesanan - Meja T-${tableNum}`;
+            document.getElementById('orderModalInfo').textContent = `Kapasitas: ${capacity} orang`;
+            document.getElementById('customerName').value = '';
+            document.getElementById('guestCountDisplay').textContent = '1';
+            document.getElementById('capacityWarning').textContent = `Maksimal ${capacity} tamu`;
+            document.getElementById('capacityWarning').classList.remove('error');
+            document.getElementById('confirmOrderBtn').disabled = false;
+            
+            const modal = document.getElementById('startOrderModal');
+            modal.classList.add('active');
+            console.log('[openStartOrderModal] Modal opened');
+        }
+        
+        function closeStartOrderModal() {
+            console.log('[closeStartOrderModal] Closing start order modal');
+            const modal = document.getElementById('startOrderModal');
+            modal.classList.remove('active');
+            currentOrderTableId = null;
+            currentOrderTableNum = null;
+            currentOrderTableCapacity = null;
+            currentGuestCount = 1;
+        }
+        
+        function incrementGuestCount() {
+            if (currentGuestCount < currentOrderTableCapacity) {
+                currentGuestCount++;
+                updateGuestCountDisplay();
+            }
+        }
+        
+        function decrementGuestCount() {
+            if (currentGuestCount > 1) {
+                currentGuestCount--;
+                updateGuestCountDisplay();
+            }
+        }
+        
+        function updateGuestCountDisplay() {
+            const display = document.getElementById('guestCountDisplay');
+            const warning = document.getElementById('capacityWarning');
+            const confirmBtn = document.getElementById('confirmOrderBtn');
+            
+            display.textContent = currentGuestCount;
+            
+            if (currentGuestCount > currentOrderTableCapacity) {
+                warning.textContent = `❌ Melebihi kapasitas maksimal ${currentOrderTableCapacity} tamu!`;
+                warning.classList.add('error');
+                confirmBtn.disabled = true;
+            } else {
+                warning.textContent = `Maksimal ${currentOrderTableCapacity} tamu`;
+                warning.classList.remove('error');
+                confirmBtn.disabled = false;
+            }
+        }
+        
+        function confirmStartOrder() {
+            console.log('[confirmStartOrder] Processing order...');
+            if (!currentOrderTableId) {
+                console.error('Table ID not set');
                 return;
             }
             
+            // Capture ID BEFORE it gets reset
+            const tableIdToRedirect = currentOrderTableId;
+            const customerName = document.getElementById('customerName').value.trim();
+            const guestCount = currentGuestCount;
+            
+            if (guestCount > currentOrderTableCapacity) {
+                alert('Jumlah tamu melebihi kapasitas meja!');
+                return;
+            }
+            
+            console.log('[confirmStartOrder] Order confirmed:', {
+                tableId: tableIdToRedirect,
+                tableNum: currentOrderTableNum,
+                customerName: customerName || '(No name)',
+                guestCount: guestCount
+            });
+            
+            // Show confirmation
+            const confirmMsg = `Pesanan untuk Meja T-${currentOrderTableNum} dengan ${guestCount} tamu${customerName ? ' (' + customerName + ')' : ''}`;
+            alert(confirmMsg);
+            
+            // Close modal (this resets currentOrderTableId to null)
+            closeStartOrderModal();
+            
+            // Update table status to occupied with guest count BEFORE redirecting
+            const updateUrl = `<?php echo base_url('kasir/api/updateTableStatus/'); ?>${tableIdToRedirect}`;
+            const updatePayload = {
+                status: 'occupied',
+                guest_count: guestCount,
+                customer_name: customerName
+            };
+            
+            console.log('[confirmStartOrder] Calling API:', updateUrl);
+            console.log('[confirmStartOrder] Payload:', updatePayload);
+            
+            fetch(updateUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatePayload)
+            })
+            .then(response => {
+                console.log('[confirmStartOrder] Response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('[confirmStartOrder] Table updated:', data);
+                // Redirect to order page using the captured ID
+                const redirectUrl = `<?php echo base_url('kasir/order/'); ?>${tableIdToRedirect}`;
+                console.log('[confirmStartOrder] Redirecting to:', redirectUrl);
+                window.location.href = redirectUrl;
+            })
+            .catch(error => {
+                console.error('[confirmStartOrder] Error updating table:', error);
+                // Still redirect even if update fails
+                const redirectUrl = `<?php echo base_url('kasir/order/'); ?>${tableIdToRedirect}`;
+                console.log('[confirmStartOrder] Redirecting anyway to:', redirectUrl);
+                window.location.href = redirectUrl;
+            });
+        }
+
+        function openFinishModal(tableId, tableNumber, guestCount) {
+            console.log('[openFinishModal] Opening modal for table:', tableId, 'number:', tableNumber, 'guests:', guestCount);
+            selectedTableId = tableId;
+            document.getElementById('modalTitle').textContent = `Selesaikan Meja ${tableNumber}?`;
+            document.getElementById('modalInfo').textContent = `Meja ini sedang digunakan oleh ${guestCount} tamu.`;
+            
+            const modal = document.getElementById('finishModal');
+            modal.classList.add('active');
+            console.log('[openFinishModal] Modal class added. Modal classes:', modal.className);
+            console.log('[openFinishModal] Modal display style:', window.getComputedStyle(modal).display);
+        }
+
+        function closeFinishModal() {
+            console.log('[closeFinishModal] Closing modal');
+            const modal = document.getElementById('finishModal');
+            modal.classList.remove('active');
+            selectedTableId = null;
+        }
+
+        function confirmFinishTable() {
+            console.log('[confirmFinishTable] Called with tableId:', selectedTableId);
+            if (!selectedTableId) return;
+            
             // Call API to finish table
-            fetch('<?php echo base_url('kasir/finishTable/'); ?>' + tableId, {
+            fetch('<?php echo base_url('kasir/finishTable/'); ?>' + selectedTableId, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -550,10 +1228,18 @@
             })
             .then(response => response.json())
             .then(data => {
+                console.log('[confirmFinishTable] Response:', data);
                 if (data.success) {
-                    // Show success message and refresh tables
-                    alert('Meja berhasil dibebaskan');
-                    loadTables();
+                    closeFinishModal();
+                    // Refresh tables data
+                    fetch('<?php echo base_url('kasir/api/tables'); ?>')
+                        .then(r => r.json())
+                        .then(data => {
+                            if (Array.isArray(data)) {
+                                tables = data;
+                                loadTables();
+                            }
+                        });
                 } else {
                     alert('Gagal membebaskan meja: ' + (data.message || 'Unknown error'));
                 }
@@ -563,6 +1249,21 @@
                 alert('Terjadi kesalahan saat membebaskan meja');
             });
         }
+
+        // Close modals when clicking outside
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('startOrderModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeStartOrderModal();
+                }
+            });
+            
+            document.getElementById('finishModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeFinishModal();
+                }
+            });
+        });
         
         function updateDate() {
             const now = new Date();

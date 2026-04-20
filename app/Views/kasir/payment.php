@@ -424,6 +424,14 @@
                     <div class="payment-card p-4 bg-[#f8f9fa] border-0 mb-4">
                         <div class="text-xs text-[#6C757D] mb-1">MEJA</div>
                         <div class="text-lg font-bold text-[#2D2D2D]">🍽️ MEJA <?php echo $order['table_id'] ?? '-'; ?></div>
+                        <?php if (!empty($order['customer_name'])): ?>
+                            <div class="text-xs text-[#6C757D] mt-2">CUSTOMER</div>
+                            <div class="text-sm font-semibold text-[#2D2D2D]">👤 <?php echo htmlspecialchars($order['customer_name']); ?></div>
+                        <?php endif; ?>
+                        <?php if (!empty($order['guest_count'])): ?>
+                            <div class="text-xs text-[#6C757D] mt-2">JUMLAH TAMU</div>
+                            <div class="text-sm font-semibold text-[#2D2D2D]">👥 <?php echo $order['guest_count']; ?> Orang</div>
+                        <?php endif; ?>
                     </div>
                     
                     <div class="summary-section">

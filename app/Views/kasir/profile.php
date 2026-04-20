@@ -51,18 +51,65 @@
             box-shadow: 0 2px 8px rgba(107, 142, 107, 0.2);
         }
         
-        .sidebar {
-            background: #1a1a1a;
-            width: 80px;
-            transition: all 0.3s ease;
+        .material-icons {
+            font-size: 24px;
+            display: block;
+            line-height: 1;
+        }
+        
+        .hamburger-btn {
             display: flex;
             flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: 16px;
+        }
+
+        .hamburger-btn span {
+            width: 24px;
+            height: 2px;
+            background: #1a202c;
+            border-radius: 1px;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .hamburger-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(10px, 10px);
+        }
+
+        .hamburger-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        .sidebar-overlay {
             position: fixed;
-            left: 0;
             top: 0;
+            left: 0;
+            right: 0;
             bottom: 0;
-            z-index: 100;
-            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
+            background: rgba(0, 0, 0, 0);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            background: rgba(0, 0, 0, 0.4);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .sidebar {
+            display: none;
         }
         
         .sidebar-item {
@@ -88,12 +135,6 @@
             color: #6B8E6B;
             background: rgba(107, 142, 107, 0.15);
             border-left-color: #6B8E6B;
-        }
-        
-        .material-icons {
-            font-size: 24px;
-            display: block;
-            line-height: 1;
         }
         
         .sidebar-logo {
@@ -123,6 +164,136 @@
             margin-top: auto;
             padding: 16px;
             border-top: 1px solid #333;
+        }
+
+        .sidebar-new {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+            border-right: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .sidebar-new.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-new-header {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .sidebar-new-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 0;
+        }
+
+        .sidebar-new-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: #718096;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-new-close:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #1a202c;
+        }
+
+        .sidebar-new-nav {
+            flex: 1;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sidebar-new-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #2D2D2D;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .sidebar-new-item:hover {
+            background: rgba(79, 70, 229, 0.08);
+            border-color: rgba(79, 70, 229, 0.2);
+            color: #4f46e5;
+        }
+
+        .sidebar-new-item.active {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(99, 102, 241, 0.1));
+            border-color: rgba(79, 70, 229, 0.3);
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+        .sidebar-new-item .material-icons {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-new-bottom {
+            padding: 16px 12px;
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
+            flex-shrink: 0;
+        }
+
+        .sidebar-new-logout {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(249, 115, 22, 0.08));
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            cursor: pointer;
+            color: #dc2626;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .sidebar-new-logout:hover {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(249, 115, 22, 0.15));
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+
+        .sidebar-new-logout .material-icons {
+            font-size: 20px;
+            flex-shrink: 0;
         }
         
         .profile-header-bg {
@@ -343,6 +514,41 @@
     </style>
 </head>
 <body>
+    <!-- SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    
+    <!-- SIDEBAR NEW -->
+    <div class="sidebar-new" id="sidebarNew">
+        <div class="sidebar-new-header">
+            <h2 class="sidebar-new-title">Menu</h2>
+            <button class="sidebar-new-close" id="sidebarClose" onclick="closeSidebar()">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+        <nav class="sidebar-new-nav">
+            <a href="<?php echo base_url('kasir'); ?>" class="sidebar-new-item">
+                <span class="material-icons">table_restaurant</span>
+                <span>Meja</span>
+            </a>
+            <a href="<?php echo base_url('kasir/history'); ?>" class="sidebar-new-item">
+                <span class="material-icons">history</span>
+                <span>Riwayat Transaksi</span>
+            </a>
+            <a href="<?php echo base_url('kasir/profile'); ?>" class="sidebar-new-item active">
+                <span class="material-icons">person</span>
+                <span>Profil</span>
+            </a>
+        </nav>
+        <div class="sidebar-new-bottom">
+            <form method="post" action="<?php echo base_url('auth/logout'); ?>" style="margin: 0;">
+                <button type="submit" class="sidebar-new-logout" style="width: 100%; text-align: left; border: none; padding: 12px 16px; font-family: 'Poppins', sans-serif;">
+                    <span class="material-icons">logout</span>
+                    <span>Logout</span>
+                </button>
+            </form>
+        </div>
+    </div>
+    
     <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="sidebar-logo">
@@ -379,13 +585,20 @@
     </div>
     
     <!-- MAIN CONTENT -->
-    <div style="margin-left: 80px; height: 100vh; display: flex; flex-direction: column;">
+    <div style="height: 100vh; display: flex; flex-direction: column;">
         <!-- HEADER -->
         <div class="header-bar">
             <div class="flex items-center justify-between px-8 py-4">
-                <div>
-                    <h2 class="text-2xl font-bold text-[#2D2D2D]">Profil Saya</h2>
-                    <p class="breadcrumb mt-1"><span class="material-icons" style="display: inline; font-size: 16px; vertical-align: middle; margin-right: 4px;">home</span> <a href="<?php echo base_url('kasir'); ?>" class="hover:underline">Dashboard</a> > <strong>Profil</strong></p>
+                <div class="flex items-center gap-4">
+                    <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()" style="margin-right: 0;">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <div>
+                        <h2 class="text-2xl font-bold text-[#2D2D2D]">Profil Saya</h2>
+                        <p class="breadcrumb mt-1"><span class="material-icons" style="display: inline; font-size: 16px; vertical-align: middle; margin-right: 4px;">home</span> <a href="<?php echo base_url('kasir'); ?>" class="hover:underline">Dashboard</a> > <strong>Profil</strong></p>
+                    </div>
                 </div>
                 <div class="user-badge">
                     <span class="material-icons" style="font-size: 16px;">person</span>
@@ -470,5 +683,39 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // ========== SIDEBAR FUNCTIONS ==========
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebarNew');
+            const overlay = document.getElementById('sidebarOverlay');
+            const hamburger = document.getElementById('hamburgerBtn');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebarNew');
+            const overlay = document.getElementById('sidebarOverlay');
+            const hamburger = document.getElementById('hamburgerBtn');
+            
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            hamburger.classList.remove('active');
+        }
+
+        // Close sidebar when clicking on a link
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarItems = document.querySelectorAll('.sidebar-new-item');
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    if (this.getAttribute('onclick')) return;
+                    closeSidebar();
+                });
+            });
+        });
+    </script>
 </body>
 </html>

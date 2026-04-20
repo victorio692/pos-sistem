@@ -131,18 +131,29 @@ class Kasir extends BaseController
             return $this->response->setJSON(['success' => false, 'message' => 'Data pesanan tidak lengkap']);
         }
 
+        // Get table info to retrieve customer name
+        $table = $this->table->find($tableId);
+        $customerName = $table['customer_name'] ?? null;
+
         // Start transaction
         $this->db->transBegin();
 
         try {
-            // Insert order
-            $orderId = $this->order->insert([
+            // Insert order with customer name
+            $orderData = [
                 'table_id' => $tableId,
                 'total_price' => $totalPrice,
                 'status' => 'pending',
                 'guest_count' => $guestCount,
                 'created_at' => date('Y-m-d H:i:s'),
-            ]);
+            ];
+            
+            // Add customer name if exists
+            if ($customerName) {
+                $orderData['customer_name'] = $customerName;
+            }
+            
+            $orderId = $this->order->insert($orderData);
 
             // Insert order items
             foreach ($items as $item) {
@@ -386,15 +397,62 @@ class Kasir extends BaseController
     /**
      * Update table status
      */
-    public function updateTableStatus($tableId, $status)
+    public function updateTableStatus($tableId, $status = null)
     {
         $session = session();
         if (!$session->get('logged_in')) {
             return $this->response->setStatusCode(401)->setJSON(['success' => false, 'error' => 'Unauthorized']);
         }
 
-        $this->table->update($tableId, ['status' => $status]);
-        return $this->response->setJSON(['success' => true]);
+        $request = $this->request;
+        
+        // Log incoming request
+        log_message('debug', "[updateTableStatus] Table ID: {$tableId}, Status param: {$status}");
+        log_message('debug', "[updateTableStatus] Request method: " . $request->getMethod());
+
+        // If status not in URL, try to get from POST JSON
+        if (!$status || $request->getMethod() === 'POST') {
+            $data = json_decode($request->getBody(), true);
+            log_message('debug', "[updateTableStatus] POST data: " . json_encode($data));
+            
+            $status = $data['status'] ?? $status;
+            $guestCount = $data['guest_count'] ?? null;
+            $customerName = $data['customer_name'] ?? null;
+        } else {
+            $guestCount = null;
+            $customerName = null;
+        }
+
+        log_message('debug', "[updateTableStatus] Status: {$status}, Guest count: " . ($guestCount ?? 'null') . ", Customer: " . ($customerName ?? 'null'));
+
+        if (!$status) {
+            log_message('warn', "[updateTableStatus] Status not found!");
+            return $this->response->setStatusCode(400)->setJSON(['success' => false, 'error' => 'Status tidak ditemukan']);
+        }
+
+        // Build update data
+        $updateData = ['status' => $status];
+        if ($guestCount !== null) {
+            $updateData['guest_count'] = $guestCount;
+        }
+        if ($customerName !== null) {
+            $updateData['customer_name'] = $customerName;
+        }
+
+        log_message('debug', "[updateTableStatus] Updating table {$tableId} with data: " . json_encode($updateData));
+
+        $updateResult = $this->table->update($tableId, $updateData);
+        
+        if ($updateResult === false) {
+            log_message('error', "[updateTableStatus] Update failed for table {$tableId}");
+            return $this->response->setStatusCode(500)->setJSON(['success' => false, 'error' => 'Update failed']);
+        }
+
+        // Verify update
+        $verifyTable = $this->table->find($tableId);
+        log_message('debug', "[updateTableStatus] After update - Table data: " . json_encode($verifyTable));
+
+        return $this->response->setJSON(['success' => true, 'message' => 'Table status updated', 'table' => $verifyTable]);
     }
 
     /**

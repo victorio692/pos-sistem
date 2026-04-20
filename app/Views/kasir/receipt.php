@@ -253,6 +253,18 @@
                         <span class="receipt-label">Pesanan #</span>
                         <span class="receipt-value">#<?php echo str_pad($order['id'], 6, '0', STR_PAD_LEFT); ?></span>
                     </div>
+                    <?php if (!empty($order['customer_name'])): ?>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Nama Customer</span>
+                        <span class="receipt-value"><?php echo $order['customer_name']; ?></span>
+                    </div>
+                    <?php endif; ?>
+                    <?php if (!empty($order['guest_count'])): ?>
+                    <div class="receipt-row">
+                        <span class="receipt-label">Jumlah Tamu</span>
+                        <span class="receipt-value"><?php echo $order['guest_count']; ?> Orang</span>
+                    </div>
+                    <?php endif; ?>
                 </div>
                 
                 <!-- ORDER ITEMS -->
