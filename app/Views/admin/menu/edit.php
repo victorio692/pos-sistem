@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Menu Baru</title>
+    <title>Edit Menu</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -76,8 +76,8 @@
             <div class="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
                 <div class="p-8 flex justify-between items-center">
                     <div>
-                        <h2 class="text-3xl font-bold text-gray-900 mb-1">Tambah Menu Baru</h2>
-                        <p class="text-gray-500">Tambahkan menu makanan atau minuman baru ke restoran Anda</p>
+                        <h2 class="text-3xl font-bold text-gray-900 mb-1">Edit Menu</h2>
+                        <p class="text-gray-500">Ubah informasi menu makanan atau minuman</p>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
 
                     <!-- Form Card -->
                     <div class="bg-white rounded-xl border border-gray-200 shadow-md overflow-hidden">
-                        <form action="<?= base_url('admin/menu/store') ?>" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
+                        <form action="<?= base_url('admin/menu/update/' . $menu['id']) ?>" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
                             <?= csrf_field() ?>
 
                             <!-- Nama Menu -->
@@ -110,7 +110,7 @@
                                     placeholder="Contoh: Nasi Goreng Spesial"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition duration-200"
                                     required
-                                    value="<?= old('name') ?>"
+                                    value="<?= old('name') ?? $menu['name'] ?>"
                                 >
                             </div>
 
@@ -126,10 +126,10 @@
                                     required
                                     onchange="handleCategoryChange()"
                                 >
-                                    <option value="" disabled selected>Pilih Kategori</option>
+                                    <option value="" disabled>Pilih Kategori</option>
                                     <?php if(!empty($categories)): ?>
                                         <?php foreach($categories as $cat): ?>
-                                            <option value="<?= $cat['category'] ?>" <?= old('category') == $cat['category'] ? 'selected' : '' ?>>
+                                            <option value="<?= $cat['category'] ?>" <?= (old('category') ?? $menu['category']) == $cat['category'] ? 'selected' : '' ?>>
                                                 <?= ucfirst($cat['category']) ?>
                                             </option>
                                         <?php endforeach; ?>
@@ -142,6 +142,7 @@
                                     placeholder="Masukkan nama kategori baru"
                                     class="w-full mt-2 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition duration-200 hidden"
                                     name="newCategory"
+                                    value="<?= old('newCategory') ?>"
                                 >
                             </div>
 
@@ -157,7 +158,7 @@
                                     placeholder="Contoh: 25000"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition duration-200"
                                     required
-                                    value="<?= old('price') ?>"
+                                    value="<?= old('price') ?? $menu['price'] ?>"
                                 >
                                 <p class="text-xs text-gray-500 mt-2">Format: 25000 (akan ditampilkan sebagai Rp 25.000)</p>
                             </div>
@@ -175,10 +176,20 @@
                                         accept="image/*"
                                         class="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100"
                                     >
-                                    <p class="text-xs text-gray-500 mt-2">Format: JPG, PNG, GIF (Max 5MB)</p>
+                                    <p class="text-xs text-gray-500 mt-2">Format: JPG, PNG, GIF (Max 5MB) - Kosongkan jika tidak ingin mengubah foto</p>
                                 </div>
+
+                                <!-- Current Image -->
+                                <?php if(!empty($menu['image']) && file_exists($menu['image'])): ?>
+                                    <div id="currentImagePreview" class="mt-4">
+                                        <p class="text-sm text-gray-600 mb-2">Foto Saat Ini:</p>
+                                        <img src="<?= base_url($menu['image']) ?>" alt="Current" class="max-w-xs rounded-lg border border-gray-200">
+                                    </div>
+                                <?php endif; ?>
+
+                                <!-- New Image Preview -->
                                 <div id="imagePreview" class="mt-4 hidden">
-                                    <p class="text-sm text-gray-600 mb-2">Preview:</p>
+                                    <p class="text-sm text-gray-600 mb-2">Foto Baru:</p>
                                     <img id="previewImage" src="" alt="Preview" class="max-w-xs rounded-lg border border-gray-200">
                                 </div>
                             </div>
@@ -189,7 +200,7 @@
                                     <i class="fas fa-arrow-left mr-2"></i> Batal
                                 </a>
                                 <button type="submit" class="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-semibold transition duration-200 shadow-md hover:shadow-lg">
-                                    <i class="fas fa-save mr-2"></i> Simpan Menu
+                                    <i class="fas fa-save mr-2"></i> Simpan Perubahan
                                 </button>
                             </div>
                         </form>
@@ -254,11 +265,12 @@
                 // Show raw value on focus for editing
                 e.target.value = e.target.value.replace(/\D/g, '');
             });
-
+            
             // Image preview
             const imageInput = document.getElementById('image');
             const imagePreview = document.getElementById('imagePreview');
             const previewImage = document.getElementById('previewImage');
+            const currentImagePreview = document.getElementById('currentImagePreview');
             
             imageInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
@@ -267,10 +279,18 @@
                     reader.onload = function(event) {
                         previewImage.src = event.target.result;
                         imagePreview.classList.remove('hidden');
+                        // Hide current image when new image is selected
+                        if (currentImagePreview) {
+                            currentImagePreview.classList.add('hidden');
+                        }
                     };
                     reader.readAsDataURL(file);
                 } else {
                     imagePreview.classList.add('hidden');
+                    // Show current image again
+                    if (currentImagePreview) {
+                        currentImagePreview.classList.remove('hidden');
+                    }
                 }
             });
         });

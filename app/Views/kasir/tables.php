@@ -119,6 +119,7 @@
             display: none;
             align-items: center;
             gap: 6px;
+            text-decoration: none;
         }
         
         .logout-btn:hover {
@@ -840,12 +841,10 @@
             </a>
         </nav>
         <div class="sidebar-bottom">
-            <form method="post" action="<?php echo base_url('auth/logout'); ?>" style="margin: 0;">
-                <button type="submit" class="sidebar-logout" style="width: 100%; text-align: left; border: none; padding: 12px 16px; font-family: 'Poppins', sans-serif;">
-                    <span class="material-icons">logout</span>
-                    <span>Logout</span>
-                </button>
-            </form>
+            <a href="<?php echo base_url('logout'); ?>" class="sidebar-logout">
+                <span class="material-icons">logout</span>
+                <span>Logout</span>
+            </a>
         </div>
     </div>
     
@@ -870,12 +869,10 @@
                     <span class="material-icons" style="font-size: 16px;">person</span>
                     <span><?php echo session()->get('username') ?? 'kasir'; ?></span>
                 </div>
-                <form method="post" action="<?php echo base_url('auth/logout'); ?>" style="margin: 0;">
-                    <button type="submit" class="logout-btn">
-                        <span class="material-icons" style="font-size: 16px;">logout</span>
-                        Logout
-                    </button>
-                </form>
+                <a href="<?php echo base_url('logout'); ?>" class="logout-btn">
+                    <span class="material-icons" style="font-size: 16px;">logout</span>
+                    Logout
+                </a>
             </div>
         </div>
         

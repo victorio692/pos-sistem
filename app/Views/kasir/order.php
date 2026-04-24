@@ -878,12 +878,10 @@
             </a>
         </nav>
         <div class="sidebar-new-bottom">
-            <form method="post" action="<?php echo base_url('auth/logout'); ?>" style="margin: 0;">
-                <button type="submit" class="sidebar-new-logout" style="width: 100%; text-align: left; border: none; padding: 12px 16px; font-family: 'Poppins', sans-serif;">
-                    <span class="material-icons">logout</span>
-                    <span>Logout</span>
-                </button>
-            </form>
+            <a href="<?php echo base_url('logout'); ?>" class="sidebar-new-logout">
+                <span class="material-icons">logout</span>
+                <span>Logout</span>
+            </a>
         </div>
     </div>
     

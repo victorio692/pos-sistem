@@ -31,12 +31,9 @@
                     <i class="fas fa-chart-line w-5"></i>
                     <span>Dashboard</span>
                 </a>
-                <a href="<?= base_url('admin/orders') ?>" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-blue-50 rounded-lg transition duration-200 relative">
+                <a href="<?= base_url('admin/orders') ?>" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-blue-50 rounded-lg transition duration-200">
                     <i class="fas fa-receipt w-5"></i>
                     <span class="font-medium">Pesanan</span>
-                    <?php if ($ordersCount['pending'] > 0) : ?>
-                        <span class="absolute right-4 top-3 bg-red-500 text-white text-xs rounded-full px-2 py-0.5 font-bold text-xs"><?= $ordersCount['pending'] ?></span>
-                    <?php endif; ?>
                 </a>
                 <a href="<?= base_url('admin/menu') ?>" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-blue-50 rounded-lg transition duration-200">
                     <i class="fas fa-bowl-food w-5"></i>
@@ -50,19 +47,24 @@
                     <i class="fas fa-users w-5"></i>
                     <span class="font-medium">User</span>
                 </a>
+                <a href="<?= base_url('admin/profile') ?>" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-blue-50 rounded-lg transition duration-200">
+                    <i class="fas fa-user-circle w-5"></i>
+                    <span class="font-medium">Profil</span>
+                </a>
             </nav>
 
             <!-- User Info & Logout -->
             <div class="absolute bottom-0 w-72 p-4 border-t border-gray-200 bg-white">
-                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg text-gray-900 mb-3 border border-gray-200">
+                <a href="<?= base_url('admin/profile') ?>" class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg text-gray-900 mb-3 border border-gray-200 hover:bg-blue-50 hover:border-blue-300 transition duration-200">
                     <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
                         <i class="fas fa-user text-white text-sm"></i>
                     </div>
-                    <div class="text-sm">
+                    <div class="text-sm flex-1">
                         <p class="font-semibold"><?= session()->get('username') ?></p>
                         <p class="text-xs text-gray-500"><?= ucfirst(session()->get('role')) ?></p>
                     </div>
-                </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
                 <a href="<?= base_url('logout') ?>" class="w-full px-4 py-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-center font-medium transition duration-200 border border-red-200 block">
                     <i class="fas fa-sign-out-alt mr-2"></i> Logout
                 </a>
@@ -154,54 +156,60 @@
 
                 <!-- CHARTS & STATUS -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <!-- Orders Status -->
+                    <!-- Payment Method Chart -->
                     <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-md">
                         <h3 class="text-lg font-bold text-gray-900 mb-6">
-                            <i class="fas fa-chart-pie mr-2 text-blue-600"></i> Status Pesanan
+                            <i class="fas fa-wallet mr-2 text-blue-600"></i> Pembayaran
                         </h3>
                         
                         <div class="space-y-3 mb-6">
-                            <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
-                                <div class="flex items-center gap-3">
-                                    <span class="w-3 h-3 bg-blue-400 rounded-full"></span>
-                                    <span class="text-gray-700 font-medium">Menunggu</span>
-                                </div>
-                                <span class="font-bold text-blue-600 text-lg"><?= $ordersCount['pending'] ?></span>
-                            </div>
-                            
                             <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
                                 <div class="flex items-center gap-3">
-                                    <span class="w-3 h-3 bg-green-400 rounded-full"></span>
-                                    <span class="text-gray-700 font-medium">Selesai</span>
+                                    <i class="fas fa-money-bill text-green-600"></i>
+                                    <span class="text-gray-700 font-medium">Cash</span>
                                 </div>
-                                <span class="font-bold text-green-600 text-lg"><?= $ordersCount['completed'] ?></span>
+                                <span class="font-bold text-green-600 text-lg"><?= $paymentMethodCount['cash'] ?? 0 ?></span>
                             </div>
                             
-                            <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
+                            <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg border border-purple-200">
                                 <div class="flex items-center gap-3">
-                                    <span class="w-3 h-3 bg-red-400 rounded-full"></span>
-                                    <span class="text-gray-700 font-medium">Dibatalkan</span>
+                                    <i class="fas fa-credit-card text-purple-600"></i>
+                                    <span class="text-gray-700 font-medium">Card</span>
                                 </div>
-                                <span class="font-bold text-red-600 text-lg"><?= $ordersCount['cancelled'] ?></span>
+                                <span class="font-bold text-purple-600 text-lg"><?= $paymentMethodCount['card'] ?? 0 ?></span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-bank text-blue-600"></i>
+                                    <span class="text-gray-700 font-medium">Transfer</span>
+                                </div>
+                                <span class="font-bold text-blue-600 text-lg"><?= $paymentMethodCount['transfer'] ?? 0 ?></span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-qrcode text-indigo-600"></i>
+                                    <span class="text-gray-700 font-medium">QRIS</span>
+                                </div>
+                                <span class="font-bold text-indigo-600 text-lg"><?= $paymentMethodCount['qris'] ?? 0 ?></span>
                             </div>
                         </div>
 
                         <div class="h-64">
-                            <canvas id="orderChart"></canvas>
+                            <canvas id="paymentMethodChart"></canvas>
                         </div>
                     </div>
 
                     <!-- Revenue Chart -->
                     <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6 shadow-md">
                         <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-lg font-bold text-gray-900">
-                                <i class="fas fa-chart-line mr-2 text-blue-600"></i> Tren Penjualan 7 Hari
-                            </h3>
-                            <select class="px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option>Hari Ini</option>
-                                <option>Minggu Ini</option>
-                                <option>Bulan Ini</option>
-                            </select>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900">
+                                    <i class="fas fa-chart-line mr-2 text-blue-600"></i> Tren Penjualan 7 Hari
+                                </h3>
+                                <p class="text-xs text-gray-500 mt-1">Klik legend untuk toggle data metode pembayaran</p>
+                            </div>
                         </div>
                         <div class="h-64">
                             <canvas id="revenueChart"></canvas>
@@ -231,12 +239,14 @@
                                         <i class="fas fa-tag mr-2 text-blue-600"></i> Total
                                     </th>
                                     <th class="text-left py-4 px-6 text-gray-700 font-semibold text-sm">
-                                        <i class="fas fa-spinner mr-2 text-blue-600"></i> Status
+                                        <i class="fas fa-list mr-2 text-blue-600"></i> Menu & Jumlah
+                                    </th>
+                                    <th class="text-left py-4 px-6 text-gray-700 font-semibold text-sm">
+                                        <i class="fas fa-wallet mr-2 text-blue-600"></i> Metode Pembayaran
                                     </th>
                                     <th class="text-left py-4 px-6 text-gray-700 font-semibold text-sm">
                                         <i class="fas fa-clock mr-2 text-blue-600"></i> Waktu
                                     </th>
-                                    <th class="text-left py-4 px-6 text-gray-700 font-semibold text-sm">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
@@ -252,25 +262,44 @@
                                                 Rp <?= number_format($order->total_price, 0, ',', '.') ?>
                                             </td>
                                             <td class="py-4 px-6">
-                                                <?php if ($order->status == 'pending') : ?>
-                                                    <span class="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 border border-blue-200 rounded-full text-xs font-semibold">
-                                                        <i class="fas fa-hourglass-half"></i> Menunggu
-                                                    </span>
-                                                <?php elseif ($order->status == 'completed') : ?>
-                                                    <span class="inline-flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 border border-green-200 rounded-full text-xs font-semibold">
-                                                        <i class="fas fa-check-circle"></i> Selesai
-                                                    </span>
-                                                <?php else : ?>
-                                                    <span class="inline-flex items-center gap-2 px-3 py-1 bg-red-100 text-red-700 border border-red-200 rounded-full text-xs font-semibold">
-                                                        <i class="fas fa-times-circle"></i> Dibatalkan
-                                                    </span>
-                                                <?php endif; ?>
+                                                <div class="text-sm text-gray-700 space-y-1">
+                                                    <?php foreach ($order->items as $item) : ?>
+                                                        <div class="flex justify-between gap-2">
+                                                            <span><?= $item['name'] ?></span>
+                                                            <span class="text-gray-500">x<?= $item['quantity'] ?></span>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                </div>
                                             </td>
-                                            <td class="py-4 px-6 text-gray-600 text-sm"><?= date('H:i', strtotime($order->created_at)) ?></td>
                                             <td class="py-4 px-6">
-                                                <a href="<?= base_url('admin/orders/detail/' . $order->id) ?>" class="inline-flex items-center gap-2 px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 border border-blue-200 text-sm font-medium">
-                                                    <i class="fas fa-eye"></i> Lihat
-                                                </a>
+                                                <?php $paymentMethod = $order->payment_method ?? 'cash'; ?>
+                                                <span class="inline-flex items-center gap-2 px-3 py-1 <?= 
+                                                    $paymentMethod === 'card' ? 'bg-purple-100 text-purple-700 border border-purple-200' : 
+                                                    ($paymentMethod === 'transfer' ? 'bg-blue-100 text-blue-700 border border-blue-200' : 
+                                                    ($paymentMethod === 'qris' ? 'bg-indigo-100 text-indigo-700 border border-indigo-200' : 
+                                                    'bg-green-100 text-green-700 border border-green-200')) 
+                                                ?> rounded-full text-xs font-semibold">
+                                                    <i class="fas <?= 
+                                                        $paymentMethod === 'card' ? 'fa-credit-card' : 
+                                                        ($paymentMethod === 'transfer' ? 'fa-bank' : 
+                                                        ($paymentMethod === 'qris' ? 'fa-qrcode' : 'fa-money-bill')) 
+                                                    ?>"></i>
+                                                    <?= 
+                                                        $paymentMethod === 'qris' ? 'QRIS' : 
+                                                        ($paymentMethod === 'card' ? 'Card' : 
+                                                        ($paymentMethod === 'transfer' ? 'Transfer' : 'Cash'))
+                                                    ?>
+                                                </span>
+                                            </td>
+                                            <td class="py-4 px-6 text-gray-600 text-sm">
+                                                <?php 
+                                                    $dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                                                    $dayOfWeek = $dayNames[date('w', strtotime($order->created_at))];
+                                                    $dateFormatted = date('d M Y', strtotime($order->created_at));
+                                                    $timeFormatted = date('H:i', strtotime($order->created_at));
+                                                ?>
+                                                <div><?= $dayOfWeek ?>, <?= $dateFormatted ?></div>
+                                                <div class="text-xs text-gray-500"><?= $timeFormatted ?></div>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -295,17 +324,17 @@
         Chart.defaults.color = '#6b7280';
         Chart.defaults.borderColor = '#e5e7eb';
 
-        // Orders Chart
-        const orderCtx = document.getElementById('orderChart');
-        if (orderCtx) {
-            new Chart(orderCtx, {
+        // Payment Method Chart
+        const paymentMethodCtx = document.getElementById('paymentMethodChart');
+        if (paymentMethodCtx) {
+            new Chart(paymentMethodCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Menunggu', 'Selesai', 'Dibatalkan'],
+                    labels: ['Cash', 'Card', 'Transfer', 'QRIS'],
                     datasets: [{
-                        data: [<?= $ordersCount['pending'] ?>, <?= $ordersCount['completed'] ?>, <?= $ordersCount['cancelled'] ?>],
-                        backgroundColor: ['#60A5FA', '#10B981', '#EF4444'],
-                        borderColor: ['#fff', '#fff', '#fff'],
+                        data: [<?= $paymentMethodCount['cash'] ?? 0 ?>, <?= $paymentMethodCount['card'] ?? 0 ?>, <?= $paymentMethodCount['transfer'] ?? 0 ?>, <?= $paymentMethodCount['qris'] ?? 0 ?>],
+                        backgroundColor: ['#10B981', '#A855F7', '#3B82F6', '#6366F1'],
+                        borderColor: ['#fff', '#fff', '#fff', '#fff'],
                         borderWidth: 2
                     }]
                 },
@@ -333,7 +362,7 @@
                 data: {
                     labels: <?= $revenueLabels ?>,
                     datasets: [{
-                        label: 'Revenue (Rp)',
+                        label: 'Total Revenue',
                         data: <?= $revenueData ?>,
                         borderColor: '#3B82F6',
                         backgroundColor: 'rgba(59, 130, 246, 0.1)',
@@ -345,17 +374,90 @@
                         pointBorderWidth: 2,
                         pointRadius: 6,
                         pointHoverRadius: 8
+                    },
+                    {
+                        label: 'Cash',
+                        data: <?= $cashData ?>,
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4,
+                        pointBackgroundColor: '#10B981',
+                        pointRadius: 4,
+                        hidden: true
+                    },
+                    {
+                        label: 'Card',
+                        data: <?= $cardData ?>,
+                        borderColor: '#A855F7',
+                        backgroundColor: 'rgba(168, 85, 247, 0.05)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4,
+                        pointBackgroundColor: '#A855F7',
+                        pointRadius: 4,
+                        hidden: true
+                    },
+                    {
+                        label: 'Transfer',
+                        data: <?= $transferData ?>,
+                        borderColor: '#F59E0B',
+                        backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4,
+                        pointBackgroundColor: '#F59E0B',
+                        pointRadius: 4,
+                        hidden: true
+                    },
+                    {
+                        label: 'QRIS',
+                        data: <?= $qrisData ?>,
+                        borderColor: '#6366F1',
+                        backgroundColor: 'rgba(99, 102, 241, 0.05)',
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.4,
+                        pointBackgroundColor: '#6366F1',
+                        pointRadius: 4,
+                        hidden: true
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
                     plugins: {
                         legend: {
                             position: 'top',
                             labels: {
                                 padding: 15,
-                                font: { size: 12, weight: '500' }
+                                font: { size: 12, weight: '500' },
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            titleFont: { size: 13, weight: 'bold' },
+                            bodyFont: { size: 12 },
+                            borderColor: '#e5e7eb',
+                            borderWidth: 1,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += 'Rp ' + context.parsed.y.toLocaleString('id-ID');
+                                    }
+                                    return label;
+                                }
                             }
                         }
                     },
@@ -365,7 +467,12 @@
                             grid: { color: '#f3f4f6' },
                             ticks: {
                                 callback: function(value) {
-                                    return 'Rp ' + (value / 1000000).toFixed(1) + 'J';
+                                    if (value >= 1000000) {
+                                        return 'Rp ' + (value / 1000000).toFixed(0) + 'J';
+                                    } else if (value >= 1000) {
+                                        return 'Rp ' + (value / 1000).toFixed(0) + 'K';
+                                    }
+                                    return 'Rp ' + value;
                                 }
                             }
                         },
@@ -378,306 +485,4 @@
         }
     </script>
 </body>
-</html>
-    <div class="flex h-screen">
-        <!-- SIDEBAR -->
-        <div class="w-64 bg-white shadow-lg fixed h-screen overflow-y-auto">
-            <div class="p-6 border-b">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                        <span class="text-white font-bold text-lg">🍽️</span>
-                    </div>
-                    <div>
-                        <h1 class="font-bold text-gray-800">POS Restoran</h1>
-                        <p class="text-xs text-gray-500">Admin Panel</p>
-                    </div>
-                </div>
-            </div>
 
-            <nav class="p-4 space-y-2">
-                <a href="<?= base_url('admin') ?>" class="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-600 rounded-lg font-medium">
-                    <span>📊</span> Dashboard
-                </a>
-                <a href="<?= base_url('admin/orders') ?>" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg transition relative">
-                    <span>📋</span> 
-                    <span>Pesanan</span>
-                    <?php if ($ordersCount['pending'] > 0) : ?>
-                        <span class="absolute right-4 top-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"><?= $ordersCount['pending'] ?></span>
-                    <?php endif; ?>
-                </a>
-                <a href="<?= base_url('admin/menu') ?>" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg transition">
-                    <span>🍜</span> Menu
-                </a>
-                <a href="<?= base_url('admin/tables') ?>" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg transition">
-                    <span>🍽️</span> Meja
-                </a>
-                <a href="<?= base_url('admin/users') ?>" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-gray-100 rounded-lg transition">
-                    <span>👥</span> User
-                </a>
-            </nav>
-
-            <div class="absolute bottom-0 w-64 p-4 border-t bg-gradient-to-r from-blue-500 to-purple-600">
-                <div class="flex items-center gap-3 p-3 bg-white bg-opacity-20 rounded-lg text-white text-sm">
-                    <span class="text-2xl">👤</span>
-                    <div>
-                        <p class="font-semibold"><?= session()->get('username') ?></p>
-                        <p class="text-xs opacity-80"><?= ucfirst(session()->get('role')) ?></p>
-                    </div>
-                </div>
-                <a href="<?= base_url('logout') ?>" class="w-full mt-3 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-center font-medium transition text-sm block">
-                    🚪 Logout
-                </a>
-            </div>
-        </div>
-
-        <!-- MAIN CONTENT -->
-        <div class="ml-64 flex-1 overflow-auto">
-            <!-- TOP BAR -->
-            <div class="bg-white border-b sticky top-0 z-10">
-                <div class="p-6 flex justify-between items-center">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-800">Selamat Datang, <?= session()->get('username') ?>! 👋</h2>
-                        <p class="text-gray-500 text-sm">Kelola bisnis restoran Anda dari sini</p>
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <input type="text" placeholder="Cari..." class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-48">
-                        <button class="p-2 hover:bg-gray-100 rounded-lg text-xl">🔔</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- CONTENT -->
-            <div class="p-6">
-                <!-- STATS CARDS -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                    <!-- Total Meja -->
-                    <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-gray-500 text-sm font-medium">Total Meja</p>
-                                <h3 class="text-3xl font-bold text-gray-800 mt-2"><?= $totalTables ?></h3>
-                                <p class="text-xs text-green-600 mt-2">✓ Tersedia</p>
-                            </div>
-                            <span class="text-4xl">🍽️</span>
-                        </div>
-                    </div>
-
-                    <!-- Total Menu -->
-                    <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-gray-500 text-sm font-medium">Total Menu</p>
-                                <h3 class="text-3xl font-bold text-gray-800 mt-2"><?= $totalMenu ?></h3>
-                                <p class="text-xs text-green-600 mt-2">✓ Aktif</p>
-                            </div>
-                            <span class="text-4xl">🍜</span>
-                        </div>
-                    </div>
-
-                    <!-- Revenue Hari Ini -->
-                    <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-gray-500 text-sm font-medium">Pendapatan Hari Ini</p>
-                                <h3 class="text-2xl font-bold text-gray-800 mt-2">Rp <?= number_format($revenueToday, 0, ',', '.') ?></h3>
-                                <p class="text-xs text-green-600 mt-2">↑ 12% vs kemarin</p>
-                            </div>
-                            <span class="text-4xl">💰</span>
-                        </div>
-                    </div>
-
-                    <!-- Total Pesanan -->
-                    <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-gray-500 text-sm font-medium">Pesanan Hari Ini</p>
-                                <h3 class="text-3xl font-bold text-gray-800 mt-2"><?= $totalOrdersToday ?></h3>
-                                <p class="text-xs text-green-600 mt-2">✓ Dicatat</p>
-                            </div>
-                            <span class="text-4xl">📋</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ORDERS SUMMARY & CHART -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-                    <!-- Orders Status -->
-                    <div class="lg:col-span-1 bg-white rounded-lg shadow-md p-6">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">📊 Status Pesanan</h3>
-                        
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-3 h-3 bg-yellow-400 rounded-full"></span>
-                                    <span class="text-gray-600 font-medium">Menunggu</span>
-                                </div>
-                                <span class="font-bold text-gray-800"><?= $ordersCount['pending'] ?></span>
-                            </div>
-                            
-                            <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-3 h-3 bg-green-500 rounded-full"></span>
-                                    <span class="text-gray-600 font-medium">Selesai</span>
-                                </div>
-                                <span class="font-bold text-gray-800"><?= $ordersCount['completed'] ?></span>
-                            </div>
-                            
-                            <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
-                                <div class="flex items-center gap-2">
-                                    <span class="w-3 h-3 bg-red-500 rounded-full"></span>
-                                    <span class="text-gray-600 font-medium">Dibatalkan</span>
-                                </div>
-                                <span class="font-bold text-gray-800"><?= $ordersCount['cancelled'] ?></span>
-                            </div>
-                        </div>
-
-                        <div class="mt-6 pt-6 border-t">
-                            <canvas id="orderChart" height="100"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Revenue Chart -->
-                    <div class="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-bold text-gray-800">📈 Tren Penjualan</h3>
-                            <select class="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option>Hari Ini</option>
-                                <option>Minggu Ini</option>
-                                <option>Bulan Ini</option>
-                            </select>
-                        </div>
-                        <canvas id="revenueChart" height="80"></canvas>
-                    </div>
-                </div>
-
-                <!-- RECENT ORDERS -->
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold text-gray-800">🕐 Pesanan Terbaru</h3>
-                        <a href="<?= base_url('admin/orders') ?>" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Lihat semua →</a>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead>
-                                <tr class="border-b border-gray-200">
-                                    <th class="text-left py-3 px-4 text-gray-600 font-semibold">Meja</th>
-                                    <th class="text-left py-3 px-4 text-gray-600 font-semibold">Total</th>
-                                    <th class="text-left py-3 px-4 text-gray-600 font-semibold">Status</th>
-                                    <th class="text-left py-3 px-4 text-gray-600 font-semibold">Waktu</th>
-                                    <th class="text-left py-3 px-4 text-gray-600 font-semibold">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (count($recentOrders) > 0) : ?>
-                                    <?php foreach ($recentOrders as $order) : ?>
-                                        <tr class="border-b border-gray-100 hover:bg-gray-50">
-                                            <td class="py-3 px-4">
-                                                <span class="font-semibold text-gray-800">Meja #<?= $order->table_number ?? 'N/A' ?></span>
-                                            </td>
-                                            <td class="py-3 px-4 font-semibold text-gray-800">
-                                                Rp <?= number_format($order->total_price, 0, ',', '.') ?>
-                                            </td>
-                                            <td class="py-3 px-4">
-                                                <?php if ($order->status == 'pending') : ?>
-                                                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">⏳ Menunggu</span>
-                                                <?php elseif ($order->status == 'completed') : ?>
-                                                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">✓ Selesai</span>
-                                                <?php else : ?>
-                                                    <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">✕ Dibatalkan</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td class="py-3 px-4 text-gray-600 text-sm"><?= date('H:i', strtotime($order->created_at)) ?></td>
-                                            <td class="py-3 px-4">
-                                                <a href="<?= base_url('admin/orders/detail/' . $order->id) ?>" class="text-blue-600 hover:text-blue-800 text-sm">Detail</a>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else : ?>
-                                    <tr>
-                                        <td colspan="5" class="py-8 px-4 text-center text-gray-500">
-                                            Tidak ada pesanan hari ini
-                                        </td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Orders Chart
-        const orderCtx = document.getElementById('orderChart');
-        if (orderCtx) {
-            new Chart(orderCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Menunggu', 'Selesai', 'Dibatalkan'],
-                    datasets: [{
-                        data: [<?= $ordersCount['pending'] ?>, <?= $ordersCount['completed'] ?>, <?= $ordersCount['cancelled'] ?>],
-                        backgroundColor: ['#FBBF24', '#10B981', '#EF4444'],
-                        borderColor: ['#fff', '#fff', '#fff'],
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
-                    }
-                }
-            });
-        }
-
-        // Revenue Chart
-        const revenueCtx = document.getElementById('revenueChart');
-        if (revenueCtx) {
-            new Chart(revenueCtx, {
-                type: 'line',
-                data: {
-                    labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
-                    datasets: [{
-                        label: 'Revenue (Rp)',
-                        data: [500000, 750000, 600000, 800000, 900000, 1200000, 1100000],
-                        borderColor: '#3B82F6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#3B82F6',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: {
-                        legend: {
-                            position: 'top'
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return 'Rp ' + value.toLocaleString('id-ID');
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    </script>
-</body>
-</html>

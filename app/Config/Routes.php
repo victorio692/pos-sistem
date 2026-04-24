@@ -56,19 +56,31 @@ $routes->group('admin', ['filter' => 'auth'], function($routes){
     $routes->get('tables', 'Admin::tables');
     $routes->get('tables/create', 'Admin::createTable');
     $routes->post('tables/store', 'Admin::storeTable');
+    $routes->get('tables/edit/(:num)', 'Admin::editTable/$1');
+    $routes->post('tables/update/(:num)', 'Admin::updateTable/$1');
     $routes->get('tables/delete/(:num)', 'Admin::deleteTable/$1');
 
     // Menu
     $routes->get('menu', 'Admin::menu');
     $routes->get('menu/create', 'Admin::createMenu');
     $routes->post('menu/store', 'Admin::storeMenu');
+    $routes->get('menu/edit/(:num)', 'Admin::editMenu/$1');
+    $routes->post('menu/update/(:num)', 'Admin::updateMenu/$1');
     $routes->get('menu/delete/(:num)', 'Admin::deleteMenu/$1');
 
     // Orders
     $routes->get('orders', 'Admin::orders');
     $routes->get('orders/detail/(:num)', 'Admin::detailOrder/$1');
+    $routes->post('orders/status/(:num)', 'Admin::updateOrderStatus/$1');
 
     // Users
     $routes->get('users', 'Admin::users');
+    $routes->get('users/create', 'Admin::createUser');
     $routes->post('users/store', 'Admin::storeUser');
+    $routes->get('users/edit/(:num)', 'Admin::editUser/$1');
+    $routes->post('users/update/(:num)', 'Admin::updateUser/$1');
+    $routes->get('users/delete/(:num)', 'Admin::deleteUser/$1');
+
+    // Profile
+    $routes->get('profile', 'Admin::profile');
 });

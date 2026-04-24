@@ -298,13 +298,9 @@
         
         .profile-header-bg {
             background: linear-gradient(135deg, #6B8E6B 0%, #5a7c5a 100%);
-            height: 180px;
+            height: 0;
             position: relative;
-            border-radius: 16px 16px 0 0;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            padding-bottom: 60px;
+            display: none;
             overflow: hidden;
         }
         
@@ -336,34 +332,45 @@
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             position: relative;
+            max-height: 500px;
         }
         
         .profile-avatar {
-            width: 140px;
-            height: 140px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             background: linear-gradient(135deg, #6B8E6B 0%, #5a7c5a 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 56px;
-            position: absolute;
-            top: 120px;
-            left: 50%;
-            transform: translateX(-50%);
+            font-size: 48px;
+            position: relative;
+            top: auto;
+            left: auto;
+            transform: none;
             border: 4px solid white;
             box-shadow: 0 8px 20px rgba(107, 142, 107, 0.3);
             z-index: 10;
+            flex-shrink: 0;
         }
         
         .profile-info {
-            text-align: center;
-            padding: 80px 32px 32px;
+            text-align: left;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+        }
+        
+        .profile-info-content {
+            flex: 1;
+            min-width: 200px;
         }
         
         .profile-name {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
             color: #2D2D2D;
             margin-bottom: 4px;
@@ -390,11 +397,21 @@
         }
         
         .profile-sections {
-            padding: 32px;
+            padding: 16px 24px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            border-top: 1px solid #f0f2f5;
+        }
+        
+        @media (max-width: 1024px) {
+            .profile-sections {
+                grid-template-columns: 1fr;
+            }
         }
         
         .profile-section {
-            margin-bottom: 32px;
+            margin-bottom: 0;
         }
         
         .profile-section:last-child {
@@ -402,37 +419,37 @@
         }
         
         .section-title {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 800;
             color: #2D2D2D;
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         
         .section-title .material-icons {
-            font-size: 20px;
+            font-size: 18px;
             color: #6B8E6B;
         }
         
         .section-divider {
-            height: 2px;
+            height: 1px;
             background: linear-gradient(90deg, #6B8E6B 0%, rgba(107, 142, 107, 0.1) 100%);
-            margin-bottom: 16px;
+            margin-bottom: 10px;
         }
         
         .profile-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 16px;
+            padding: 10px 12px;
             background: linear-gradient(135deg, #f8f9fa 0%, #f0f2f5 100%);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            font-size: 14px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
             border-left: 4px solid #6B8E6B;
             transition: all 0.3s ease;
         }
@@ -446,14 +463,14 @@
             color: #6C757D;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 12px;
+            font-size: 11px;
             letter-spacing: 0.3px;
         }
         
         .profile-item-value {
             color: #2D2D2D;
             font-weight: 700;
-            font-size: 15px;
+            font-size: 13px;
         }
         
         .profile-item-value.highlight {
@@ -467,8 +484,14 @@
         .profile-actions {
             display: flex;
             gap: 12px;
-            padding: 32px;
-            border-top: 2px solid #f0f2f5;
+            padding: 16px 24px;
+            border-top: 1px solid #f0f2f5;
+        }
+        
+        @media (max-width: 640px) {
+            .profile-actions {
+                flex-direction: column;
+            }
         }
         
         .btn {
@@ -540,12 +563,10 @@
             </a>
         </nav>
         <div class="sidebar-new-bottom">
-            <form method="post" action="<?php echo base_url('auth/logout'); ?>" style="margin: 0;">
-                <button type="submit" class="sidebar-new-logout" style="width: 100%; text-align: left; border: none; padding: 12px 16px; font-family: 'Poppins', sans-serif;">
-                    <span class="material-icons">logout</span>
-                    <span>Logout</span>
-                </button>
-            </form>
+            <a href="<?php echo base_url('logout'); ?>" class="sidebar-new-logout">
+                <span class="material-icons">logout</span>
+                <span>Logout</span>
+            </a>
         </div>
     </div>
     
@@ -609,25 +630,28 @@
         
         <!-- CONTENT -->
         <div class="flex-1 overflow-y-auto px-8 py-8">
-            <div class="max-w-3xl mx-auto">
+            <div class="max-w-6xl mx-auto">
                 <!-- PROFILE CARD -->
                 <div class="profile-card">
                     <!-- HEADER BACKGROUND -->
                     <div class="profile-header-bg"></div>
                     
-                    <!-- AVATAR -->
-                    <div class="profile-avatar">
-                        <span class="material-icons" style="font-size: 56px;">person</span>
-                    </div>
-                    
-                    <!-- PROFILE INFO -->
+                    <!-- AVATAR + INFO (HORIZONTAL) -->
                     <div class="profile-info">
-                        <div class="profile-name">Andi Saputra</div>
-                        <div class="profile-username">@<?php echo $username ?? 'kasir1'; ?></div>
-                        <div class="profile-role-badge">👨‍💼 Kasir</div>
+                        <!-- AVATAR -->
+                        <div class="profile-avatar">
+                            <span class="material-icons" style="font-size: 48px;">person</span>
+                        </div>
+                        
+                        <!-- INFO CONTENT -->
+                        <div class="profile-info-content">
+                            <div class="profile-name">Andi Saputra</div>
+                            <div class="profile-username">@<?php echo $username ?? 'kasir1'; ?></div>
+                            
+                        </div>
                     </div>
                     
-                    <!-- SECTIONS -->
+                    <!-- SECTIONS (GRID 2 KOLOM) -->
                     <div class="profile-sections">
                         <!-- DATA DIRI -->
                         <div class="profile-section">
@@ -676,8 +700,6 @@
                                 <span class="profile-item-value highlight">Rp<?php echo number_format($todayRevenue ?? 0, 0, ',', '.'); ?></span>
                             </div>
                         </div>
-                    </div>
-                    
                     </div>
                 </div>
             </div>

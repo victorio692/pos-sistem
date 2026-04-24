@@ -6,6 +6,41 @@
     <title>Manajemen User</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 90%;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+    </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
     <div class="flex h-screen">
@@ -46,10 +81,24 @@
                     <i class="fas fa-users w-5"></i>
                     <span>User</span>
                 </a>
+                <a href="<?= base_url('admin/profile') ?>" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-blue-50 rounded-lg transition duration-200">
+                    <i class="fas fa-user-circle w-5"></i>
+                    <span class="font-medium">Profil</span>
+                </a>
             </nav>
 
-            <!-- Logout -->
+            <!-- User Info & Logout -->
             <div class="absolute bottom-0 w-72 p-4 border-t border-gray-200 bg-white">
+                <a href="<?= base_url('admin/profile') ?>" class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg text-gray-900 mb-3 border border-gray-200 hover:bg-blue-50 hover:border-blue-300 transition duration-200">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-white text-sm"></i>
+                    </div>
+                    <div class="text-sm flex-1">
+                        <p class="font-semibold"><?= session()->get('username') ?></p>
+                        <p class="text-xs text-gray-500"><?= ucfirst(session()->get('role')) ?></p>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
                 <a href="<?= base_url('logout') ?>" class="w-full px-4 py-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-center font-medium transition duration-200 border border-red-200 block">
                     <i class="fas fa-sign-out-alt mr-2"></i> Logout
                 </a>
@@ -73,6 +122,26 @@
 
             <!-- CONTENT -->
             <div class="p-8">
+                <!-- Success Message -->
+                <?php if (session()->getFlashdata('success')): ?>
+                    <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
+                        <i class="fas fa-check-circle text-green-600 mt-1"></i>
+                        <div>
+                            <p class="text-green-800 font-medium"><?= session()->getFlashdata('success') ?></p>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Error Message -->
+                <?php if (session()->getFlashdata('error')): ?>
+                    <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+                        <i class="fas fa-exclamation-circle text-red-600 mt-1"></i>
+                        <div>
+                            <p class="text-red-800 font-medium"><?= session()->getFlashdata('error') ?></p>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
                 <?php if (count($users) > 0) : ?>
                     <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-md">
                         <div class="overflow-x-auto">
@@ -83,7 +152,7 @@
                                             <i class="fas fa-user-circle mr-2 text-blue-600"></i> Username
                                         </th>
                                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">
-                                            <i class="fas fa-envelope mr-2 text-blue-600"></i> Email
+                                            <i class="fas fa-id-card mr-2 text-blue-600"></i> Nama Lengkap
                                         </th>
                                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">
                                             <i class="fas fa-shield mr-2 text-blue-600"></i> Role
@@ -105,7 +174,7 @@
                                                     <span class="text-gray-900 font-medium"><?= $user['username'] ?? '-' ?></span>
                                                 </div>
                                             </td>
-                                            <td class="px-6 py-4 text-sm text-gray-700"><?= $user['email'] ?? '-' ?></td>
+                                            <td class="px-6 py-4 text-sm text-gray-700"><?= $user['full_name'] ?? '-' ?></td>
                                             <td class="px-6 py-4 text-sm">
                                                 <span class="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 border border-blue-200 rounded-full text-xs font-semibold">
                                                     <i class="fas fa-tag"></i> <?= ucfirst($user['role'] ?? 'user') ?>
@@ -117,10 +186,10 @@
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 text-sm space-x-2">
-                                                <button class="inline-flex items-center gap-2 px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 border border-blue-200">
+                                                <a href="<?= base_url('admin/users/edit/' . $user['id']) ?>" class="inline-flex items-center gap-2 px-3 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition duration-200 border border-blue-200">
                                                     <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="inline-flex items-center gap-2 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition duration-200 border border-red-200">
+                                                </a>
+                                                <button onclick="confirmDeleteUser(<?= $user['id'] ?>)" class="inline-flex items-center gap-2 px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg transition duration-200 border border-red-200">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
@@ -140,5 +209,73 @@
             </div>
         </div>
     </div>
+
+    <!-- DELETE USER MODAL -->
+    <div id="deleteUserModal" class="modal-overlay" onclick="closeDeleteUserModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-red-50 to-red-100 px-6 py-4 border-b border-red-200">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-exclamation-triangle text-red-600 text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-lg">Hapus User</h3>
+                        <p class="text-xs text-gray-600">Tindakan ini tidak dapat dibatalkan</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Body -->
+            <div class="px-6 py-4">
+                <p class="text-gray-700 text-sm leading-relaxed">
+                    Apakah Anda yakin ingin menghapus user <strong id="deleteUserName"></strong>? Data user ini akan dihapus secara permanen dari sistem.
+                </p>
+            </div>
+
+            <!-- Footer -->
+            <div class="flex gap-3 p-6 bg-gray-50 border-t border-gray-200 rounded-b-lg">
+                <button onclick="closeDeleteUserModal()" class="flex-1 px-4 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-semibold transition duration-200">
+                    Batal
+                </button>
+                <button id="confirmDeleteBtn" onclick="confirmDeleteAction()" class="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition duration-200">
+                    <i class="fas fa-trash mr-2"></i> Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let deleteUserId = null;
+
+        function confirmDeleteUser(userId) {
+            const row = event.target.closest('tr');
+            const usernameSpan = row.querySelector('td:first-child span.font-medium');
+            const username = usernameSpan ? usernameSpan.textContent : 'User';
+            
+            deleteUserId = userId;
+            document.getElementById('deleteUserName').textContent = username;
+            document.getElementById('deleteUserModal').classList.add('show');
+        }
+
+        function closeDeleteUserModal(event) {
+            if (event && event.target.id !== 'deleteUserModal') return;
+            document.getElementById('deleteUserModal').classList.remove('show');
+            deleteUserId = null;
+        }
+
+        function confirmDeleteAction() {
+            if (deleteUserId) {
+                window.location.href = '<?= base_url('admin/users/delete/') ?>' + deleteUserId;
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDeleteUserModal();
+            }
+        });
+    </script>
 </body>
 </html>

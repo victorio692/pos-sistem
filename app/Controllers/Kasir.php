@@ -225,13 +225,28 @@ class Kasir extends BaseController
             ->get()
             ->getResultArray();
 
+        // Calculate total amount
+        $totalAmount = 0;
+        foreach ($orderItems as $item) {
+            $totalAmount += $item['price'] * $item['quantity'];
+        }
+
+        // Bank account info (you can move this to config)
+        $bankAccount = [
+            'bank_name' => 'BCA',
+            'account_number' => '1234567890',
+            'account_name' => 'PT Restaurant Maju'
+        ];
+
         $data = [
             'title' => 'Pembayaran - POS Restoran',
             'order' => $order,
             'orderItems' => $orderItems,
+            'totalAmount' => $totalAmount,
+            'bankAccount' => $bankAccount,
         ];
 
-        return view('kasir/payment', $data);
+        return view('kasir/payment_new', $data);
     }
 
     /**

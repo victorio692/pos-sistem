@@ -46,10 +46,24 @@
                     <i class="fas fa-users w-5"></i>
                     <span class="font-medium">User</span>
                 </a>
+                <a href="<?= base_url('admin/profile') ?>" class="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-blue-50 rounded-lg transition duration-200">
+                    <i class="fas fa-user-circle w-5"></i>
+                    <span class="font-medium">Profil</span>
+                </a>
             </nav>
 
-            <!-- Logout -->
+            <!-- User Info & Logout -->
             <div class="absolute bottom-0 w-72 p-4 border-t border-gray-200 bg-white">
+                <a href="<?= base_url('admin/profile') ?>" class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg text-gray-900 mb-3 border border-gray-200 hover:bg-blue-50 hover:border-blue-300 transition duration-200">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-white text-sm"></i>
+                    </div>
+                    <div class="text-sm flex-1">
+                        <p class="font-semibold"><?= session()->get('username') ?></p>
+                        <p class="text-xs text-gray-500"><?= ucfirst(session()->get('role')) ?></p>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </a>
                 <a href="<?= base_url('logout') ?>" class="w-full px-4 py-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-center font-medium transition duration-200 border border-red-200 block">
                     <i class="fas fa-sign-out-alt mr-2"></i> Logout
                 </a>
@@ -60,86 +74,67 @@
         <div class="ml-72 flex-1 overflow-auto">
             <!-- HEADER -->
             <div class="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
-                <div class="p-8 flex justify-between items-center">
+                <div class="p-6 flex justify-between items-center">
                     <div>
-                        <h2 class="text-3xl font-bold text-gray-900 mb-1">Manajemen Menu</h2>
-                        <p class="text-gray-500">Kelola semua menu restoran Anda</p>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-1">Manajemen Menu</h2>
+                        <p class="text-sm text-gray-500">Kelola semua menu restoran Anda</p>
                     </div>
-                    <a href="<?= base_url('admin/menu/create') ?>" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-semibold transition duration-200 shadow-md hover:shadow-lg">
+                    <a href="<?= base_url('admin/menu/create') ?>" class="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-semibold text-sm transition duration-200 shadow-md hover:shadow-lg">
                         <i class="fas fa-plus"></i> Tambah Menu
                     </a>
                 </div>
             </div>
 
             <!-- CONTENT -->
-            <div class="p-8">
+            <div class="p-6">
                 <?php if (count($menuByCategory) > 0) : ?>
-                    <div class="space-y-5">
-                        <?php 
-                        $categoryIcons = [
-                            'makanan' => 'fa-utensils',
-                            'minuman' => 'fa-glass-water',
-                            'snack' => 'fa-cookie',
-                            'paket' => 'fa-box',
-                        ];
-                        ?>
-                        <?php foreach ($menuByCategory as $category => $items) : ?>
-                            <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-300 group">
-                                <!-- Category Header - Simplified -->
-                                <div class="px-6 py-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition duration-200" onclick="toggleCategory(this)">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center gap-3">
-                                            <i class="fas fa-chevron-right text-gray-400 transition-transform duration-300 category-icon text-sm"></i>
-                                            <i class="fas <?= $categoryIcons[strtolower($category)] ?? 'fa-bowl-food' ?> text-blue-500 text-lg"></i>
-                                            <h3 class="text-gray-900 font-semibold text-base"><?= ucfirst($category) ?></h3>
-                                            <span class="ml-2 px-2 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded-lg">
-                                                <?= count($items) ?>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Menu Items - Compact List -->
-                                <div class="category-content overflow-hidden transition-all duration-300 max-h-none">
-                                    <div class="p-5 space-y-3">
-                                        <?php foreach ($items as $item) : ?>
-                                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50 transition-all duration-200 group/item">
-                                                <!-- Menu Info -->
-                                                <div class="flex-1">
-                                                    <div class="flex items-start gap-3">
-                                                        <!-- Menu Icon -->
-                                                        <div class="w-10 h-10 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg flex items-center justify-center flex-shrink-0 group-hover/item:from-blue-200 group-hover/item:to-blue-300 transition-all duration-200 overflow-hidden">
-                                                            <?php if (!empty($item['image']) && file_exists($item['image'])): ?>
-                                                                <img src="<?= base_url($item['image']) ?>" alt="<?= $item['name'] ?>" class="w-full h-full object-cover">
-                                                            <?php else: ?>
-                                                                <i class="fas fa-image text-gray-400 text-sm group-hover/item:text-blue-500"></i>
-                                                            <?php endif; ?>
-                                                        </div>
-                                                        <!-- Name & Price -->
-                                                        <div class="flex-1 min-w-0">
-                                                            <h4 class="text-gray-900 font-semibold text-sm mb-1"><?= $item['name'] ?? '-' ?></h4>
-                                                            <p class="text-blue-600 font-bold text-xs">Rp <?= number_format($item['price'] ?? 0, 0, ',', '.') ?></p>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                    <!-- Category Filter Dropdown -->
+                    <div class="mb-6 flex items-center gap-3">
+                        <label for="categoryFilter" class="text-sm font-medium text-gray-700">Filter Kategori:</label>
+                        <select id="categoryFilter" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer hover:border-gray-400 transition-colors">
+                            <option value="">Semua Kategori</option>
+                            <?php foreach (array_keys($menuByCategory) as $category) : ?>
+                                <option value="<?= strtolower($category) ?>"><?= ucfirst($category) ?> (<?= count($menuByCategory[$category]) ?>)</option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                                                <!-- Status & Actions -->
-                                                <div class="flex items-center gap-2 ml-3">
-                                                    <span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-lg border border-green-200 flex-shrink-0">
-                                                        <i class="fas fa-check text-xs"></i>
-                                                    </span>
-                                                    <a href="<?= base_url('admin/menu/edit/' . $item['id']) ?>" class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-all duration-200" title="Edit">
-                                                        <i class="fas fa-pen-to-square text-sm"></i>
-                                                    </a>
-                                                    <button type="button" onclick="confirmDelete('<?= $item['id'] ?>')" class="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-all duration-200" title="Hapus">
-                                                        <i class="fas fa-trash-alt text-sm"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        <?php endforeach; ?>
+                    <!-- Menu Items Grid -->
+                    <div class="grid grid-cols-3 gap-4">
+                        <?php foreach ($menuByCategory as $category => $items) : ?>
+                            <?php foreach ($items as $item) : ?>
+                                <div class="menu-item flex flex-col p-4 bg-white rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all duration-200 group/item" data-category="<?= strtolower($category) ?>">
+                                    <!-- Menu Image -->
+                                    <div class="w-full h-32 bg-gradient-to-br from-gray-200 to-gray-300 rounded-lg flex items-center justify-center flex-shrink-0 group-hover/item:from-blue-100 group-hover/item:to-blue-200 transition-all duration-200 overflow-hidden mb-3">
+                                        <?php if (!empty($item['image']) && file_exists($item['image'])): ?>
+                                            <img src="<?= base_url($item['image']) ?>" alt="<?= $item['name'] ?>" class="w-full h-full object-cover">
+                                        <?php else: ?>
+                                            <i class="fas fa-image text-gray-400 text-2xl group-hover/item:text-blue-500"></i>
+                                        <?php endif; ?>
+                                    </div>
+                                    
+                                    <!-- Name & Price -->
+                                    <h4 class="text-gray-900 font-semibold text-sm mb-2 line-clamp-2"><?= $item['name'] ?? '-' ?></h4>
+                                    <p class="text-blue-600 font-bold text-sm mb-3">Rp <?= number_format($item['price'] ?? 0, 0, ',', '.') ?></p>
+                                    
+                                    <!-- Category Badge -->
+                                    <div class="mb-3 inline-block">
+                                        <span class="px-2 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded">
+                                            <?= ucfirst($category) ?>
+                                        </span>
+                                    </div>
+                                    
+                                    <!-- Actions -->
+                                    <div class="flex items-center gap-2 mt-auto">
+                                        <a href="<?= base_url('admin/menu/edit/' . $item['id']) ?>" class="flex-1 p-2 text-center text-blue-600 hover:bg-blue-100 rounded transition-all duration-200 text-sm font-medium" title="Edit">
+                                            <i class="fas fa-pen-to-square mr-1"></i> Edit
+                                        </a>
+                                        <button type="button" onclick="confirmDelete('<?= $item['id'] ?>', '<?= $item['name'] ?>')" class="flex-1 p-2 text-center text-red-600 hover:bg-red-100 rounded transition-all duration-200 text-sm font-medium" title="Hapus">
+                                            <i class="fas fa-trash-alt mr-1"></i> Hapus
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
+                            <?php endforeach; ?>
                         <?php endforeach; ?>
                     </div>
                 <?php else : ?>
@@ -153,36 +148,111 @@
         </div>
     </div>
 
-    <script>
-        function toggleCategory(header) {
-            const content = header.nextElementSibling;
-            const icon = header.querySelector('.category-icon');
-            const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
-            
-            if (isOpen) {
-                content.style.maxHeight = '0px';
-                icon.classList.remove('rotate-90');
-            } else {
-                content.style.maxHeight = content.scrollHeight + 'px';
-                icon.classList.add('rotate-90');
-            }
-        }
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 transition-opacity duration-300">
+        <div class="bg-white rounded-xl shadow-2xl max-w-sm w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="deleteModalContent">
+            <!-- Icon & Title -->
+            <div class="bg-gradient-to-r from-red-50 to-red-100 px-6 py-6 border-b border-red-200 flex flex-col items-center">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900">Hapus Menu</h3>
+            </div>
 
-        // Initialize all categories as open
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.category-content').forEach(content => {
-                content.style.maxHeight = content.scrollHeight + 'px';
-                content.previousElementSibling.querySelector('.category-icon').classList.add('rotate-90');
+            <!-- Message -->
+            <div class="px-6 py-6">
+                <p class="text-gray-600 text-center">
+                    Apakah anda yakin ingin menghapus menu <strong id="deleteMenuName"></strong>? 
+                </p>
+            </div>
+
+            <!-- Buttons -->
+            <div class="px-6 py-4 bg-gray-50 rounded-b-xl flex gap-3 border-t border-gray-200">
+                <button 
+                    type="button" 
+                    onclick="closeDeleteModal()" 
+                    class="flex-1 px-4 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold rounded-lg transition duration-200"
+                >
+                    <i class="fas fa-times mr-2"></i>Batal
+                </button>
+                <button 
+                    type="button" 
+                    onclick="confirmDeleteAction()" 
+                    class="flex-1 px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-lg transition duration-200 shadow-md hover:shadow-lg"
+                >
+                    <i class="fas fa-trash-alt mr-2"></i>Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let deleteMenuId = null;
+
+        // Filter menu items by category
+        const filterSelect = document.getElementById('categoryFilter');
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        filterSelect.addEventListener('change', function() {
+            const selectedCategory = this.value;
+            
+            menuItems.forEach(item => {
+                if (selectedCategory === '' || item.dataset.category === selectedCategory) {
+                    item.style.display = '';
+                    // Trigger animation on show
+                    setTimeout(() => item.classList.add('show'), 0);
+                } else {
+                    item.style.display = 'none';
+                }
             });
         });
 
-        function confirmDelete(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus menu ini?')) {
-                window.location.href = '<?= base_url('admin/menu/delete/') ?>' + id;
+        function confirmDelete(id, menuName) {
+            deleteMenuId = id;
+            document.getElementById('deleteMenuName').textContent = menuName;
+            const deleteModal = document.getElementById('deleteModal');
+            const deleteModalContent = document.getElementById('deleteModalContent');
+            
+            deleteModal.classList.remove('hidden');
+            // Trigger animation
+            setTimeout(() => {
+                deleteModalContent.classList.remove('scale-95', 'opacity-0');
+                deleteModalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeDeleteModal() {
+            const deleteModal = document.getElementById('deleteModal');
+            const deleteModalContent = document.getElementById('deleteModalContent');
+            
+            deleteModalContent.classList.add('scale-95', 'opacity-0');
+            deleteModalContent.classList.remove('scale-100', 'opacity-100');
+            
+            setTimeout(() => {
+                deleteModal.classList.add('hidden');
+                deleteMenuId = null;
+            }, 300);
+        }
+
+        function confirmDeleteAction() {
+            if (deleteMenuId) {
+                window.location.href = '<?= base_url('admin/menu/delete/') ?>' + deleteMenuId;
             }
         }
+
+        // Close modal when clicking outside (on background)
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeleteModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !document.getElementById('deleteModal').classList.contains('hidden')) {
+                closeDeleteModal();
+            }
+        });
     </script>
-        </div>
-    </div>
 </body>
 </html>
